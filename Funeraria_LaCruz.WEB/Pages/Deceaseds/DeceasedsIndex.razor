@@ -24,7 +24,7 @@ else
             <div class="card">
                 <div class="card-header">
                     <span>
-                        <i class="oi oi-globe"></i> Difuntos
+                        <i class="oi oi-box"></i> Difuntos
                         <a class="btn btn-sm btn-primary float-end" href="/deceaseds/create"><i class="oi oi-plus"></i> Adicionar Difunto</a>
                     </span>
                 </div>
@@ -117,8 +117,8 @@ else
                                 @deceased.EstadoCivil
                             </td>
                             <td>
-                                <a href="/deceaseds/edit/@deceased.Id" class="btn btn-warning">Editar</a>
-                                <button class="btn btn-danger" @onclick=@(() => Delete(deceased))>Borrar</button>
+                                <a href="/deceaseds/edit/@deceased.Id" class="btn btn-warning"><i class="oi oi-pencil" /> Editar</a>
+                                <button class="btn btn-danger" @onclick=@(() => Delete(deceased))><i class="oi oi-trash" /> Borrar</button>
                             </td>
 
                         </tr>

@@ -22,7 +22,7 @@ else
             <div class="card">
                 <div class="card-header">
                     <span>
-                        <i class="oi oi-globe"></i> Sub-Categorias
+                        <i class="oi oi-tags"></i> Sub-Categorias
                         <a class="btn btn-sm btn-primary float-end" href="/funerariaCategories/create/@category.Id"><i class="oi oi-plus"></i> Adicionar Sub-Categoria</a>
                     </span>
                 </div>
@@ -64,9 +64,9 @@ else
                                 @funerariaCategory.ProductsNumber
                             </td>
                             <td>
-                                <a class="btn btn-info" href="/funerariaCategories/details/@funerariaCategory.Id">Detalles</a>
-                                <a class="btn btn-warning" href="/funerariaCategories/edit/@funerariaCategory.Id">Editar</a>
-                                <button class="btn btn-danger" @onclick=@(() => DeleteAsync(funerariaCategory.Id))>Borrar</button>
+                                <a class="btn btn-info" href="/funerariaCategories/details/@funerariaCategory.Id"><i class="oi oi-list" /> Detalles</a>
+                                <a class="btn btn-warning" href="/funerariaCategories/edit/@funerariaCategory.Id"><i class="oi oi-pencil" /> Editar</a>
+                                <button class="btn btn-danger" @onclick=@(() => DeleteAsync(funerariaCategory.Id))><i class="oi oi-trash" /> Borrar</button>
                             </td>
                         </tr>
                     }

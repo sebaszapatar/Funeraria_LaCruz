@@ -64,9 +64,9 @@ else
                                 @state.CitiesNumber
                             </td>
                             <td>
-                                <a class="btn btn-info" href="/states/details/@state.Id">Detalles</a>
-                                <a class="btn btn-warning" href="/states/edit/@state.Id">Editar</a>
-                                <button class="btn btn-danger" @onclick=@(() => DeleteAsync(state.Id))>Borrar</button>
+                                <a class="btn btn-info" href="/states/details/@state.Id"><i class="oi oi-list" /> Detalles</a>
+                                <a class="btn btn-warning" href="/states/edit/@state.Id"><i class="oi oi-pencil" /> Editar</a>
+                                <button class="btn btn-danger" @onclick=@(() => DeleteAsync(state.Id))><i class="oi oi-trash" /> Borrar</button>
                             </td>
                         </tr>
                     }

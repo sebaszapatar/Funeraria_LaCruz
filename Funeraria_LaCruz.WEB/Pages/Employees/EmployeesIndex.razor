@@ -24,7 +24,7 @@ else
             <div class="card">
                 <div class="card-header">
                     <span>
-                        <i class="oi oi-globe"></i> Empleados
+                        <i class="oi oi-people"></i> Empleados
                         <a class="btn btn-sm btn-primary float-end" href="/employees/create"><i class="oi oi-plus"></i> Adicionar Empleado</a>
                     </span>
                 </div>
@@ -106,8 +106,8 @@ else
                                 @employee.Email
                             </td>
                             <td>
-                                <a href="/employees/edit/@employee.Id" class="btn btn-warning">Editar</a>
-                                <button class="btn btn-danger" @onclick=@(() => Delete(employee))>Borrar</button>
+                                <a href="/employees/edit/@employee.Id" class="btn btn-warning"><i class="oi oi-pencil" /> Editar</a>
+                                <button class="btn btn-danger" @onclick=@(() => Delete(employee))><i class="oi oi-trash" /> Borrar</button>
                             </td>
 
                         </tr>

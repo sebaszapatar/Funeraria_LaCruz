@@ -22,7 +22,7 @@ else
             <div class="card">
                 <div class="card-header">
                     <span>
-                        <i class="oi oi-globe"></i> Productos
+                        <i class="oi oi-tags"></i> Productos
                         <a class="btn btn-sm btn-primary float-end" href="/funerariaCategory/create/@funerariaCategory.CategoryId"><i class="oi oi-plus"></i> Adicionar Producto</a>
                     </span>
                 </div>
@@ -76,8 +76,8 @@ else
                                 @product.Precio
                             </td>
                             <td>
-                                <a class="btn btn-warning" href="/products/edit/@product.Id">Editar</a>
-                                <button class="btn btn-danger" @onclick=@(() => DeleteAsync(product.Id))>Borrar</button>
+                                <a class="btn btn-warning" href="/products/edit/@product.Id"><i class="oi oi-pencil" /> Editar</a>
+                                <button class="btn btn-danger" @onclick=@(() => DeleteAsync(product.Id))><i class="oi oi-trash" /> Borrar</button>
                             </td>
                         </tr>
                     }

@@ -24,7 +24,7 @@ else
             <div class="card">
                 <div class="card-header">
                     <span>
-                        <i class="oi oi-globe"></i> Servicios
+                        <i class="oi oi-dollar"></i> Servicios
                         <a class="btn btn-sm btn-primary float-end" href="/services/create"><i class="oi oi-plus"></i> Adicionar Servicio</a>
                     </span>
                 </div>
@@ -73,8 +73,8 @@ else
                                 @service.Precio
                             </td>
                             <td>
-                                <a href="/services/edit/@service.Id" class="btn btn-warning">Editar</a>
-                                <button class="btn btn-danger" @onclick=@(() => Delete(service))>Borrar</button>
+                                <a href="/services/edit/@service.Id" class="btn btn-warning"><i class="oi oi-pencil" /> Editar</a>
+                                <button class="btn btn-danger" @onclick=@(() => Delete(service))><i class="oi oi-trash" /> Borrar</button>
                             </td>
 
                         </tr>
