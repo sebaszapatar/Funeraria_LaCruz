@@ -64,8 +64,8 @@ else
                                 @funerariaCategory.ProductsNumber
                             </td>
                             <td>
-                                <a class="btn btn-info" href="/states/details/@funerariaCategory.Id">Detalles</a>
-                                <a class="btn btn-warning" href="/states/edit/@funerariaCategory.Id">Editar</a>
+                                <a class="btn btn-info" href="/funerariaCategories/details/@funerariaCategory.Id">Detalles</a>
+                                <a class="btn btn-warning" href="/funerariaCategories/edit/@funerariaCategory.Id">Editar</a>
                                 <button class="btn btn-danger" @onclick=@(() => DeleteAsync(funerariaCategory.Id))>Borrar</button>
                             </td>
                         </tr>
