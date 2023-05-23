@@ -2,8 +2,6 @@ using CurrieTechnologies.Razor.SweetAlert2;
 using Funeraria_LaCruz.WEB;
 using Funeraria_LaCruz.WEB.Auth;
 using Funeraria_LaCruz.WEB.Repositories;
-using Funeraria_LaCruz.WEB.Auth;
-using Funeraria_LaCruz.WEB;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;

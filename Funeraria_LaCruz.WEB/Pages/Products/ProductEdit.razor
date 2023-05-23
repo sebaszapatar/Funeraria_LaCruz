@@ -1,0 +1,65 @@
+﻿@page "/products/edit/{ProductId:int}"
+@inject IRepository repository
+@inject NavigationManager navigationManager
+@inject SweetAlertService sweetAlertService
+@inject NavigationManager navigationManager
+@using CurrieTechnologies.Razor.SweetAlert2;
+@using Funeraria_LaCruz.Shared.Entities;
+@using System.Net;
+
+<h3>Editar Producto</h3>
+
+@if (product is null)
+{
+    <p>Cargando...</p>
+}
+else
+{
+    <ProductForm @ref="productForm" Product="product" OnValidSubmit="EditAsync" ReturnAction="Return" />
+}
+
+@code {
+    private Product? product;
+    private ProductForm? productForm;
+
+    [Parameter]
+    public int ProductId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var responseHttp = await repository.Get<Product>($"/api/products/{ProductId}");
+        if (responseHttp.Error)
+        {
+            if (responseHttp.HttpResponseMessage.StatusCode == HttpStatusCode.NotFound)
+            {
+                navigationManager.NavigateTo("/categories");
+                return;
+            }
+
+            var message = await responseHttp.GetErrorMessage();
+            await sweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
+            return;
+        }
+
+        product = responseHttp.Response;
+    }
+
+    private async Task EditAsync()
+    {
+        var responseHttp = await repository.Put("/api/products", product);
+        if (responseHttp.Error)
+        {
+            var message = await responseHttp.GetErrorMessage();
+            await sweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
+            return;
+        }
+
+        Return();
+    }
+
+    private void Return()
+    {
+        productForm!.FormPostedSuccessfully = true;
+        navigationManager.NavigateTo($"/funerariaCategories/details/{product!.FunerariaCategoryId}");
+    }
+}

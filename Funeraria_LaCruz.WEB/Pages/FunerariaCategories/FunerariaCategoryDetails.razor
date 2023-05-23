@@ -1,29 +1,29 @@
 ﻿@attribute [Authorize(Roles = "Admin")]
-@page "/countries/details/{Id:int}"
+@page "/funerariaCategories/details/{FunerariaCategoryId:int}"
+@using System.Net;
 @using CurrieTechnologies.Razor.SweetAlert2;
 @using Funeraria_LaCruz.Shared.Entities;
-@using System.Net;
 @using Microsoft.AspNetCore.Authorization;
 @inject IRepository repository
 @inject NavigationManager navigationManager
 @inject SweetAlertService sweetAlertService
 
-@if (country is null)
+@if (funerariaCategory is null)
 {
     <div class="spinner" />
 }
 else
 {
-    <h3>@country.Name</h3>
+    <h3>@funerariaCategory.Name</h3>
 
-    <GenericList MyList="states!">
+    <GenericList MyList="products!">
         <Body>
 
             <div class="card">
                 <div class="card-header">
                     <span>
-                        <i class="oi oi-globe"></i> Estados
-                        <a class="btn btn-sm btn-primary float-end" href="/states/create/@country.Id"><i class="oi oi-plus"></i> Adicionar Estado / Departamento</a>
+                        <i class="oi oi-globe"></i> Productos
+                        <a class="btn btn-sm btn-primary float-end" href="/funerariaCategory/create/@funerariaCategory.CategoryId"><i class="oi oi-plus"></i> Adicionar Producto</a>
                     </span>
                 </div>
             </div>
@@ -31,7 +31,7 @@ else
             <div class="card-body">
                 <div class="mb-2" style="display: flex; flex-wrap:wrap; align-items: center;">
                     <div>
-                        <input style="width: 400px;" type="text" class="form-control" id="titulo" placeholder="Buscar estado..." @bind-value="Filter" />
+                        <input style="width: 400px;" type="text" class="form-control" id="titulo" placeholder="Buscar producto..." @bind-value="Filter" />
                     </div>
                     <div class="mx-1">
                         <button type="button" class="btn btn-outline-primary" @onclick="ApplyFilterAsync"><i class="oi oi-layers" /> Filtrar</button>
@@ -45,28 +45,39 @@ else
                     SelectedPage="SelectedPage" />
 
 
+
             <table class="table table-striped">
                 <thead>
                     <tr>
-                        <th>Estado / Departamento</th>
-                        <th style="width:140px">Ciudades</th>
-                        <th style="width:260px"></th>
+                        <th>Producto</th>
+                        <th style="width:180px"></th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var state in states!)
+                    @foreach (var product in products!)
                     {
                         <tr>
                             <td>
-                                @state.Name
+                                @product.Name
                             </td>
                             <td>
-                                @state.CitiesNumber
+                                @product.Descripcion
                             </td>
                             <td>
-                                <a class="btn btn-info" href="/states/details/@state.Id">Detalles</a>
-                                <a class="btn btn-warning" href="/states/edit/@state.Id">Editar</a>
-                                <button class="btn btn-danger" @onclick=@(() => DeleteAsync(state.Id))>Borrar</button>
+                                @product.Color
+                            </td>
+                            <td>
+                                @product.Material
+                            </td>
+                            <td>
+                                @product.Stock
+                            </td>
+                            <td>
+                                @product.Precio
+                            </td>
+                            <td>
+                                <a class="btn btn-warning" href="/products/edit/@product.Id">Editar</a>
+                                <button class="btn btn-danger" @onclick=@(() => DeleteAsync(product.Id))>Borrar</button>
                             </td>
                         </tr>
                     }
@@ -77,14 +88,14 @@ else
 }
 
 @code {
-    private Country? country;
-    private List<State>? states;
+    private FunerariaCategory? funerariaCategory;
+    private List<Product>? products;
     private int currentPage = 1;
     private int totalPages;
 
 
     [Parameter]
-    public int Id { get; set; }
+    public int FunerariaCategoryId { get; set; }
 
     [Parameter]
     [SupplyParameterFromQuery]
@@ -121,27 +132,27 @@ else
 
         if (string.IsNullOrEmpty(Filter))
         {
-            url1 = $"api/states?id={Id}&page={page}";
-            url2 = $"api/states/totalPages?id={Id}";
+            url1 = $"api/products?id={FunerariaCategoryId}&page={page}";
+            url2 = $"api/products/totalPages?id={FunerariaCategoryId}";
         }
         else
         {
-            url1 = $"api/states?id={Id}&page={page}&filter={Filter}";
-            url2 = $"api/states/totalPages?id={Id}&filter={Filter}";
+            url1 = $"api/products?id={FunerariaCategoryId}&page={page}&filter={Filter}";
+            url2 = $"api/products/totalPages?id={FunerariaCategoryId}&filter={Filter}";
         }
 
 
-        var responseHppt = await repository.Get<Country>($"api/countries/{Id}");
-        var responseHppt2 = await repository.Get<List<State>>(url1);
+        var responseHppt = await repository.Get<FunerariaCategory>($"api/funerariaCategory/{FunerariaCategoryId}");
+        var responseHppt2 = await repository.Get<List<Product>>(url1);
         var responseHppt3 = await repository.Get<int>(url2);
 
-        country = responseHppt.Response;
-        states = responseHppt2.Response;
+        funerariaCategory = responseHppt.Response;
+        products = responseHppt2.Response;
         totalPages = responseHppt3.Response;
 
     }
 
-    private async Task DeleteAsync(int id)
+    private async Task DeleteAsync(int productId)
     {
         var result = await sweetAlertService.FireAsync(new SweetAlertOptions
             {
@@ -159,7 +170,7 @@ else
             return;
         }
 
-        var responseHttp = await repository.Delete($"/api/states/{id}");
+        var responseHttp = await repository.Delete($"/api/products/{productId}");
         if (responseHttp.Error)
         {
             if (responseHttp.HttpResponseMessage.StatusCode != HttpStatusCode.NotFound)
@@ -185,4 +196,6 @@ else
         await LoadAsync(page);
         await SelectedPage(page);
     }
+
 }
+

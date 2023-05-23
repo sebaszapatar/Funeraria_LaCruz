@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Funeraria_LaCruz.API.Controllers
 {
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 
     [ApiController]
     [Route("/api/states")]

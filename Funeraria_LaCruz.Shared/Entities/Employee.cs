@@ -1,49 +1,41 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Funeraria_LaCruz.Shared.Entities
 {
-    public class Product
+    public class Employee
     {
         public int Id { get; set; }
 
-        [Display(Name = "Nombre")]
+        [Display(Name = "Cédula")]
         [MaxLength(100, ErrorMessage = "El campo {0} debe tener máximo {1} caractéres.")]
         [Required(ErrorMessage = "El campo {0} es obligatorio.")]
-        public string Name { get; set; } = null!;
+        public string Cedula { get; set; } = null!;
 
-        [Display(Name = "Descripción")]
+        [Display(Name = "Nombre Completo")]
         [MaxLength(100, ErrorMessage = "El campo {0} debe tener máximo {1} caractéres.")]
         [Required(ErrorMessage = "El campo {0} es obligatorio.")]
-        public string Descripcion { get; set; } = null!;
+        public string FullName { get; set; } = null!;
 
-        [Display(Name = "Color")]
+        [Display(Name = "Dirección")]
         [MaxLength(100, ErrorMessage = "El campo {0} debe tener máximo {1} caractéres.")]
         [Required(ErrorMessage = "El campo {0} es obligatorio.")]
-        public string Color { get; set; } = null!;
+        public string Dir { get; set; } = null!;
 
-        [Display(Name = "Material")]
+        [Display(Name = "Cargo")]
         [MaxLength(100, ErrorMessage = "El campo {0} debe tener máximo {1} caractéres.")]
         [Required(ErrorMessage = "El campo {0} es obligatorio.")]
-        public string Material { get; set; } = null!;
+        public string Cargo { get; set; } = null!;
 
-        [Display(Name = "Stock")]
+        [Display(Name = "Teléfono")]
         [MaxLength(100, ErrorMessage = "El campo {0} debe tener máximo {1} caractéres.")]
         [Required(ErrorMessage = "El campo {0} es obligatorio.")]
-        public string Stock { get; set; } = null!;
+        public string Tel { get; set; } = null!;
 
-        [Display(Name = "Precio")]
+        [Display(Name = "Correo electrónico")]
         [MaxLength(100, ErrorMessage = "El campo {0} debe tener máximo {1} caractéres.")]
         [Required(ErrorMessage = "El campo {0} es obligatorio.")]
-        public string Precio { get; set; } = null!;
-
-        public int FunerariaCategoryId { get; set; }
-
-
-        public FunerariaCategory? FunerariaCategories { get; set; }
-
+        public string Email { get; set; } = null!;
 
 
     }
 }
-

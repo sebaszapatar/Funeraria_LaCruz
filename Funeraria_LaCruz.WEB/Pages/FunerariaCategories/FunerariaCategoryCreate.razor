@@ -1,0 +1,41 @@
+﻿@page "/funerariaCategories/create/{CategoryId:int}"
+
+@using CurrieTechnologies.Razor.SweetAlert2;
+@using Funeraria_LaCruz.Shared.Entities;
+@inject IRepository repository
+@inject NavigationManager navigationManager
+@inject SweetAlertService sweetAlertService
+
+<h3>Crear Sub-Categoria</h3>
+
+<FunerariaCategoryForm @ref="funerariaCategoryForm" funerariaCategory="funerariaCategory" OnValidSubmit="CreateAsync" ReturnAction="Return" />
+
+@code {
+    private FunerariaCategory funerariaCategory = new();
+    private FunerariaCategoryForm? funerariaCategoryForm;
+
+    [Parameter]
+    public int CategoryId { get; set; }
+
+    private async Task CreateAsync()
+    {
+
+        funerariaCategory.CategoryId = CategoryId;
+        var httpResponse = await repository.Post("/api/funerariaCategories", funerariaCategory);
+        if (httpResponse.Error)
+        {
+            var message = await httpResponse.GetErrorMessage();
+            await sweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
+            return;
+        }
+
+        Return();
+    }
+
+    private void Return()
+    {
+        funerariaCategoryForm!.FormPostedSuccessfully = true;
+        navigationManager.NavigateTo($"/categories/details/{CategoryId}");
+    }
+}
+

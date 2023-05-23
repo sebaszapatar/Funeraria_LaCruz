@@ -1,0 +1,68 @@
+﻿
+@page "/funerariaCategories/edit/{FunerariaCategoryId:int}"
+@using CurrieTechnologies.Razor.SweetAlert2;
+@using Funeraria_LaCruz.Shared.Entities;
+@inject IRepository repository
+@inject NavigationManager navigationManager
+@inject SweetAlertService sweetAlertService
+@inject NavigationManager navigationManager
+@using System.Net;
+
+
+<h3>Editar Sub-Categoria</h3>
+
+@if (funerariaCategory is null)
+{
+        <p>Cargando...</p>
+}
+else
+{
+        <FunerariaCategoryForm @ref="funerariaCategoryForm" funerariaCategory="funerariaCategory" OnValidSubmit="EditAsync" ReturnAction="Return" />
+}
+
+@code {
+    private FunerariaCategory? funerariaCategory;
+    private FunerariaCategoryForm? funerariaCategoryForm;
+
+    [Parameter]
+    public int FunerariaCategoryId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var responseHttp = await repository.Get<FunerariaCategory>($"/api/funerariaCategories/{FunerariaCategoryId}");
+        if (responseHttp.Error)
+        {
+            if (responseHttp.HttpResponseMessage.StatusCode == HttpStatusCode.NotFound)
+            {
+                navigationManager.NavigateTo("/categories");
+                return;
+            }
+
+            var message = await responseHttp.GetErrorMessage();
+            await sweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
+            return;
+        }
+
+        funerariaCategory = responseHttp.Response;
+    }
+
+    private async Task EditAsync()
+    {
+        var responseHttp = await repository.Put("/api/funerariaCategories", funerariaCategory);
+        if (responseHttp.Error)
+        {
+            var message = await responseHttp.GetErrorMessage();
+            await sweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
+            return;
+        }
+
+        Return();
+    }
+
+    private void Return()
+    {
+        funerariaCategoryForm!.FormPostedSuccessfully = true;
+        navigationManager.NavigateTo($"/categories/details/{funerariaCategory!.CategoryId}");
+    }
+}
+

@@ -13,34 +13,36 @@ namespace Funeraria_LaCruz.API.Controllers
     //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 
     [ApiController]
-    [Route("/api/countries")]
+    [Route("/api/services")]
 
-    
-    public class CountriesController : ControllerBase
+
+
+    public class ServicesController : ControllerBase
     {
+
         private readonly DataContext _context;
 
-        public CountriesController(DataContext context)
+        public ServicesController(DataContext context)
         {
             _context = context;
         }
 
         [HttpPost]
-        public async Task<ActionResult> Post(Country country)
+        public async Task<ActionResult> Post(Service service)
         {
-            _context.Add(country);
+            _context.Add(service);
 
             try
             {
                 await _context.SaveChangesAsync();
-                return Ok(country);
+                return Ok(service);
 
             }
             catch (DbUpdateException dbUpdateException)
             {
                 if (dbUpdateException.InnerException!.Message.Contains("duplicate"))
                 {
-                    return BadRequest("Ya existe un país con el mismo nombre.");
+                    return BadRequest("Ya existe un servicio con el mismo nombre.");
                 }
                 else
                 {
@@ -57,8 +59,8 @@ namespace Funeraria_LaCruz.API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAsync([FromQuery] PaginationDTO pagination)
         {
-            var queryable = _context.Countries
-                .Include(x => x.States)
+            var queryable = _context.Services
+                //.Include(x => x.States)
                 .AsQueryable();
 
 
@@ -77,7 +79,7 @@ namespace Funeraria_LaCruz.API.Controllers
         [HttpGet("totalPages")]
         public async Task<ActionResult> GetPages([FromQuery] PaginationDTO pagination)
         {
-            var queryable = _context.Countries.AsQueryable();
+            var queryable = _context.Services.AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(pagination.Filter))
             {
@@ -92,61 +94,35 @@ namespace Funeraria_LaCruz.API.Controllers
 
 
 
-
-
         [HttpGet("{id:int}")]
         public async Task<ActionResult> Get(int id)
         {
-            var country = await _context.Countries
-
-                .Include(x => x.States!)
-                .ThenInclude(x => x.Cities!)
-                .FirstOrDefaultAsync(x => x.Id == id);
-
-            if (country is null)
+            var service = await _context.Services.FirstOrDefaultAsync(x => x.Id == id);
+            if (service is null)
             {
                 return NotFound();
             }
 
-            return Ok(country);
+            return Ok(service);
         }
-
-
-        [HttpGet("full")]
-        public async Task<ActionResult> GetFull()
-        {
-            return Ok(await _context.Countries
-                .Include(x => x.States!)
-                .ThenInclude(x => x.Cities)
-                .ToListAsync());
-        }
-
-        [AllowAnonymous]
-        [HttpGet("combo")]
-        public async Task<ActionResult> GetCombo()
-        {
-            return Ok(await _context.Countries.ToListAsync());
-        }
-
-
 
 
         [HttpPut]
-        public async Task<ActionResult> Put(Country country)
+        public async Task<ActionResult> Put(Service service)
         {
-            _context.Update(country);
+            _context.Update(service);
 
             try
             {
                 await _context.SaveChangesAsync();
-                return Ok(country);
+                return Ok(service);
 
             }
             catch (DbUpdateException dbUpdateException)
             {
                 if (dbUpdateException.InnerException!.Message.Contains("duplicate"))
                 {
-                    return BadRequest("Ya existe un registro con el mismo nombre.");
+                    return BadRequest("Ya existe un servicio con el mismo nombre.");
                 }
                 else
                 {
@@ -164,8 +140,8 @@ namespace Funeraria_LaCruz.API.Controllers
         [HttpDelete("{id:int}")]
         public async Task<ActionResult> Delete(int id)
         {
-            var afectedRows = await _context.Countries
-                .Where(x => x.Id == id)
+            var afectedRows = await _context.Services
+                .Where(y => y.Id == id)
 
                 .ExecuteDeleteAsync();
 
@@ -179,4 +155,6 @@ namespace Funeraria_LaCruz.API.Controllers
 
 
     }
+
+
 }

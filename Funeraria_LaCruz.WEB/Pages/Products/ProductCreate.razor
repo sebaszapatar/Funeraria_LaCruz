@@ -1,0 +1,39 @@
+﻿@page "/products/create/{FunerariaCategoryId:int}"
+@inject IRepository repository
+@inject NavigationManager navigationManager
+@inject SweetAlertService sweetAlertService
+@using CurrieTechnologies.Razor.SweetAlert2;
+@using Funeraria_LaCruz.Shared.Entities;
+
+
+<h3>Crear Producto</h3>
+
+<ProductForm @ref="productForm" Product="product" OnValidSubmit="CreateAsync" ReturnAction="Return" />
+
+@code {
+    private Product product = new();
+    private ProductForm? productForm;
+
+    [Parameter]
+    public int FunerariaCategoryId { get; set; }
+
+    private async Task CreateAsync()
+    {
+        product.FunerariaCategoryId = FunerariaCategoryId;
+        var httpResponse = await repository.Post("/api/products", product);
+        if (httpResponse.Error)
+        {
+            var message = await httpResponse.GetErrorMessage();
+            await sweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
+            return;
+        }
+
+        Return();
+    }
+
+    private void Return()
+    {
+        productForm!.FormPostedSuccessfully = true;
+        navigationManager.NavigateTo($"/funerariaCategories/details/{FunerariaCategoryId}");
+    }
+}

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Funeraria_LaCruz.API.Migrations
 {
     /// <inheritdoc />
-    public partial class DbFuneraria : Migration
+    public partial class DbFunerariaV2 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -52,38 +52,6 @@ namespace Funeraria_LaCruz.API.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Medicines",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
-                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Stock = table.Column<float>(type: "real", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Medicines", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Product",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
-                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Stock = table.Column<float>(type: "real", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Product", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
@@ -100,6 +68,46 @@ namespace Funeraria_LaCruz.API.Migrations
                         name: "FK_AspNetRoleClaims_AspNetRoles_RoleId",
                         column: x => x.RoleId,
                         principalTable: "AspNetRoles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "FunerariaCategories",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    CategoryId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FunerariaCategories", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_FunerariaCategories_Categories_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Categories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "FunerariaImages",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Image = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CategoryId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FunerariaImages", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_FunerariaImages_Categories_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Categories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -125,60 +133,33 @@ namespace Funeraria_LaCruz.API.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "FunerariaCategories",
+                name: "Products",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ProductId = table.Column<int>(type: "int", nullable: false),
-                    CategoryId = table.Column<int>(type: "int", nullable: false),
-                    ServiceId = table.Column<int>(type: "int", nullable: true)
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Descripcion = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Color = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Material = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Stock = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Precio = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    FunerariaCategoryId = table.Column<int>(type: "int", nullable: false),
+                    FunerariaImageId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_FunerariaCategories", x => x.Id);
+                    table.PrimaryKey("PK_Products", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_FunerariaCategories_Categories_CategoryId",
-                        column: x => x.CategoryId,
-                        principalTable: "Categories",
+                        name: "FK_Products_FunerariaCategories_FunerariaCategoryId",
+                        column: x => x.FunerariaCategoryId,
+                        principalTable: "FunerariaCategories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_FunerariaCategories_Medicines_ServiceId",
-                        column: x => x.ServiceId,
-                        principalTable: "Medicines",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_FunerariaCategories_Product_ProductId",
-                        column: x => x.ProductId,
-                        principalTable: "Product",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "MedicineImages",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    MedicineId = table.Column<int>(type: "int", nullable: false),
-                    Image = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ProductId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_MedicineImages", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_MedicineImages_Medicines_MedicineId",
-                        column: x => x.MedicineId,
-                        principalTable: "Medicines",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_MedicineImages_Product_ProductId",
-                        column: x => x.ProductId,
-                        principalTable: "Product",
+                        name: "FK_Products_FunerariaImages_FunerariaImageId",
+                        column: x => x.FunerariaImageId,
+                        principalTable: "FunerariaImages",
                         principalColumn: "Id");
                 });
 
@@ -388,35 +369,26 @@ namespace Funeraria_LaCruz.API.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_FunerariaCategories_CategoryId",
+                name: "IX_FunerariaCategories_CategoryId_Name",
                 table: "FunerariaCategories",
+                columns: new[] { "CategoryId", "Name" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FunerariaImages_CategoryId",
+                table: "FunerariaImages",
                 column: "CategoryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_FunerariaCategories_ProductId",
-                table: "FunerariaCategories",
-                column: "ProductId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_FunerariaCategories_ServiceId",
-                table: "FunerariaCategories",
-                column: "ServiceId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_MedicineImages_MedicineId",
-                table: "MedicineImages",
-                column: "MedicineId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_MedicineImages_ProductId",
-                table: "MedicineImages",
-                column: "ProductId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Medicines_Name",
-                table: "Medicines",
-                column: "Name",
+                name: "IX_Products_FunerariaCategoryId_Name",
+                table: "Products",
+                columns: new[] { "FunerariaCategoryId", "Name" },
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Products_FunerariaImageId",
+                table: "Products",
+                column: "FunerariaImageId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_States_CountryId_Name",
@@ -444,10 +416,7 @@ namespace Funeraria_LaCruz.API.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "FunerariaCategories");
-
-            migrationBuilder.DropTable(
-                name: "MedicineImages");
+                name: "Products");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
@@ -456,16 +425,16 @@ namespace Funeraria_LaCruz.API.Migrations
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "Categories");
+                name: "FunerariaCategories");
 
             migrationBuilder.DropTable(
-                name: "Medicines");
-
-            migrationBuilder.DropTable(
-                name: "Product");
+                name: "FunerariaImages");
 
             migrationBuilder.DropTable(
                 name: "Cities");
+
+            migrationBuilder.DropTable(
+                name: "Categories");
 
             migrationBuilder.DropTable(
                 name: "States");

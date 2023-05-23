@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Funeraria_LaCruz.API.Controllers
 {
 
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 
     [ApiController]
     [Route("/api/categories")]
@@ -60,7 +60,7 @@ namespace Funeraria_LaCruz.API.Controllers
         public async Task<IActionResult> GetAsync([FromQuery] PaginationDTO pagination)
         {
             var queryable = _context.Categories
-                //.Include(x => x.States)
+                .Include(x => x.FunerariaCategories)
                 .AsQueryable();
 
 
@@ -97,7 +97,10 @@ namespace Funeraria_LaCruz.API.Controllers
         [HttpGet("{id:int}")]
         public async Task<ActionResult> Get(int id)
         {
-            var category = await _context.Categories.FirstOrDefaultAsync(x => x.Id == id);
+            var category = await _context.Categories
+              .Include(x => x.FunerariaCategories!)
+              .ThenInclude(x => x.Products!)
+              .FirstOrDefaultAsync(x => x.Id == id);
             if (category is null)
             {
                 return NotFound();
@@ -105,6 +108,17 @@ namespace Funeraria_LaCruz.API.Controllers
 
             return Ok(category);
         }
+
+        //Borrar e intentar si sale cargando...
+
+        //[HttpGet("full")]
+        //public async Task<ActionResult> GetFull()
+        //{
+        //    return Ok(await _context.Categories
+        //        .Include(x => x.FunerariaCategories!)
+        //        .ThenInclude(x => x.Products)
+        //        .ToListAsync());
+        //}
 
 
         [HttpPut]

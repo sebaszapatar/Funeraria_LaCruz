@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Funeraria_LaCruz.API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230511191254_DbFuneraria")]
-    partial class DbFuneraria
+    [Migration("20230519180843_DbFunerariaV2")]
+    partial class DbFunerariaV2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -102,19 +102,15 @@ namespace Funeraria_LaCruz.API.Migrations
                     b.Property<int>("CategoryId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("ServiceId")
-                        .HasColumnType("int");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CategoryId");
-
-                    b.HasIndex("ProductId");
-
-                    b.HasIndex("ServiceId");
+                    b.HasIndex("CategoryId", "Name")
+                        .IsUnique();
 
                     b.ToTable("FunerariaCategories");
                 });
@@ -127,23 +123,18 @@ namespace Funeraria_LaCruz.API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Image")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("MedicineId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("ProductId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("MedicineId");
+                    b.HasIndex("CategoryId");
 
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("MedicineImages");
+                    b.ToTable("FunerariaImages");
                 });
 
             modelBuilder.Entity("Funeraria_LaCruz.Shared.Entities.Product", b =>
@@ -154,57 +145,50 @@ namespace Funeraria_LaCruz.API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Description")
+                    b.Property<string>("Color")
                         .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("Descripcion")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<float>("Stock")
-                        .HasColumnType("real");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Product");
-                });
-
-            modelBuilder.Entity("Funeraria_LaCruz.Shared.Entities.Service", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<int>("FunerariaCategoryId")
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<int?>("FunerariaImageId")
+                        .HasColumnType("int");
 
-                    b.Property<string>("Description")
+                    b.Property<string>("Material")
                         .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<string>("Precio")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
-                    b.Property<float>("Stock")
-                        .HasColumnType("real");
+                    b.Property<string>("Stock")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Name")
+                    b.HasIndex("FunerariaImageId");
+
+                    b.HasIndex("FunerariaCategoryId", "Name")
                         .IsUnique();
 
-                    b.ToTable("Medicines");
+                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("Funeraria_LaCruz.Shared.Entities.State", b =>
@@ -473,40 +457,39 @@ namespace Funeraria_LaCruz.API.Migrations
 
             modelBuilder.Entity("Funeraria_LaCruz.Shared.Entities.FunerariaCategory", b =>
                 {
-                    b.HasOne("Funeraria_LaCruz.Shared.Entities.Category", "Category")
+                    b.HasOne("Funeraria_LaCruz.Shared.Entities.Category", "Categories")
                         .WithMany("FunerariaCategories")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Funeraria_LaCruz.Shared.Entities.Product", "Product")
-                        .WithMany("FunerariaCategories")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Funeraria_LaCruz.Shared.Entities.Service", null)
-                        .WithMany("FunerariaCategories")
-                        .HasForeignKey("ServiceId");
-
-                    b.Navigation("Category");
-
-                    b.Navigation("Product");
+                    b.Navigation("Categories");
                 });
 
             modelBuilder.Entity("Funeraria_LaCruz.Shared.Entities.FunerariaImage", b =>
                 {
-                    b.HasOne("Funeraria_LaCruz.Shared.Entities.Service", "Medicine")
-                        .WithMany("MedicineImages")
-                        .HasForeignKey("MedicineId")
+                    b.HasOne("Funeraria_LaCruz.Shared.Entities.Category", "Category")
+                        .WithMany("FunerariaImages")
+                        .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Funeraria_LaCruz.Shared.Entities.Product", null)
-                        .WithMany("FunerariaImages")
-                        .HasForeignKey("ProductId");
+                    b.Navigation("Category");
+                });
 
-                    b.Navigation("Medicine");
+            modelBuilder.Entity("Funeraria_LaCruz.Shared.Entities.Product", b =>
+                {
+                    b.HasOne("Funeraria_LaCruz.Shared.Entities.FunerariaCategory", "FunerariaCategories")
+                        .WithMany("Products")
+                        .HasForeignKey("FunerariaCategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Funeraria_LaCruz.Shared.Entities.FunerariaImage", null)
+                        .WithMany("Products")
+                        .HasForeignKey("FunerariaImageId");
+
+                    b.Navigation("FunerariaCategories");
                 });
 
             modelBuilder.Entity("Funeraria_LaCruz.Shared.Entities.State", b =>
@@ -585,6 +568,8 @@ namespace Funeraria_LaCruz.API.Migrations
             modelBuilder.Entity("Funeraria_LaCruz.Shared.Entities.Category", b =>
                 {
                     b.Navigation("FunerariaCategories");
+
+                    b.Navigation("FunerariaImages");
                 });
 
             modelBuilder.Entity("Funeraria_LaCruz.Shared.Entities.City", b =>
@@ -597,18 +582,14 @@ namespace Funeraria_LaCruz.API.Migrations
                     b.Navigation("States");
                 });
 
-            modelBuilder.Entity("Funeraria_LaCruz.Shared.Entities.Product", b =>
+            modelBuilder.Entity("Funeraria_LaCruz.Shared.Entities.FunerariaCategory", b =>
                 {
-                    b.Navigation("FunerariaCategories");
-
-                    b.Navigation("FunerariaImages");
+                    b.Navigation("Products");
                 });
 
-            modelBuilder.Entity("Funeraria_LaCruz.Shared.Entities.Service", b =>
+            modelBuilder.Entity("Funeraria_LaCruz.Shared.Entities.FunerariaImage", b =>
                 {
-                    b.Navigation("FunerariaCategories");
-
-                    b.Navigation("MedicineImages");
+                    b.Navigation("Products");
                 });
 
             modelBuilder.Entity("Funeraria_LaCruz.Shared.Entities.State", b =>

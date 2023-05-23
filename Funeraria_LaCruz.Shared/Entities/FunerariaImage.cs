@@ -10,15 +10,21 @@ namespace Funeraria_LaCruz.Shared.Entities
 {
     public class FunerariaImage
     {
-
         public int Id { get; set; }
-
-        public Service Medicine { get; set; } = null!;
-
-        public int MedicineId { get; set; }
 
         [Display(Name = "Imagen")]
         public string Image { get; set; } = null!;
+
+        public ICollection<Product>? Products { get; set; }
+
+        public int CategoryId { get; set; }
+
+        public Category? Category { get; set; }
+
+
+        [Display(Name = "Productos")]
+        public int ProductsNumber => Products == null ? 0 : Products.Count;
+
 
 
 

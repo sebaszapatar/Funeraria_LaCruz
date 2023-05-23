@@ -14,4 +14,15 @@
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.30.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Funeraria_LaCruz.Shared\Funeraria_LaCruz.Shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Pages\Employees\" />
+    <Folder Include="Pages\Deceaseds\" />
+    <Folder Include="Pages\Plans\" />
+    <Folder Include="Pages\Services\" />
+  </ItemGroup>
+
 </Project>

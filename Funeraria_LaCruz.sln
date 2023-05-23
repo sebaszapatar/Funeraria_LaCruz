@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33627.172
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Funeraria_LaCruz.API", "Funeraria_LaCruz.API\Funeraria_LaCruz.API.csproj", "{3A006A8A-0E57-4EC4-8B5F-1D6423060807}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Funeraria_LaCruz.API", "Funeraria_LaCruz.API\Funeraria_LaCruz.API.csproj", "{3A006A8A-0E57-4EC4-8B5F-1D6423060807}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Funeraria_LaCruz.Shared", "Funeraria_LaCruz.Shared\Funeraria_LaCruz.Shared.csproj", "{33AFCFF2-8BED-4A53-80E2-1D31042DFB99}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Funeraria_LaCruz.Shared", "Funeraria_LaCruz.Shared\Funeraria_LaCruz.Shared.csproj", "{33AFCFF2-8BED-4A53-80E2-1D31042DFB99}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Funeraria_LaCruz.WEB", "Funeraria_LaCruz.WEB\Funeraria_LaCruz.WEB.csproj", "{734105CF-590F-43F6-8BD2-F7C2FC3F343A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Funeraria_LaCruz.WEB", "Funeraria_LaCruz.WEB\Funeraria_LaCruz.WEB.csproj", "{734105CF-590F-43F6-8BD2-F7C2FC3F343A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

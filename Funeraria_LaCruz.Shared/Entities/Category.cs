@@ -20,8 +20,16 @@ namespace Funeraria_LaCruz.Shared.Entities
 
         public ICollection<FunerariaCategory>? FunerariaCategories { get; set; }
 
-        [Display(Name = "Productos")]
-        public int MedicineCategoriesNumber => FunerariaCategories == null ? 0 : FunerariaCategories.Count;
+        [Display(Name = "Sub-Categorias")]
+        public int FunerariaCategoriesNumber => FunerariaCategories == null ? 0 : FunerariaCategories.Count;
+
+        public ICollection<FunerariaImage>? FunerariaImages { get; set; }
+
+        [Display(Name = "Imágenes")]
+        public int FunerariaImagesNumber => FunerariaImages == null ? 0 : FunerariaImages.Count;
+
+        [Display(Name = "Imagén")]
+        public string MainImage => FunerariaImages == null ? string.Empty : FunerariaImages.FirstOrDefault()!.Image;
 
 
     }
