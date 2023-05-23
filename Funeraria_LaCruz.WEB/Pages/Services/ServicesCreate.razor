@@ -1,0 +1,35 @@
+﻿@page "/services/create"
+@using CurrieTechnologies.Razor.SweetAlert2;
+@inject NavigationManager navigationManager
+@inject IRepository repository
+@inject SweetAlertService swal
+
+<h3>Crear Servicio</h3>
+
+<ServicesForm @ref="servicesForm" Service="service" OnValidSubmit="Create" ReturnAction="Return" />
+
+@code {
+    private Service service = new();
+    private ServicesForm? servicesForm;
+
+    private async Task Create()
+    {
+        var httpResponse = await repository.Post("api/services", service);
+
+        if (httpResponse.Error)
+        {
+            var mensajeError = await httpResponse.GetErrorMessage();
+            await swal.FireAsync("Error", mensajeError, SweetAlertIcon.Error);
+        }
+        else
+        {
+            servicesForm!.FormPostedSuccessfully = true;
+            navigationManager.NavigateTo("services");
+        }
+    }
+
+    private void Return()
+    {
+        navigationManager.NavigateTo("services");
+    }
+}

@@ -1,5 +1,5 @@
 ﻿@attribute [Authorize(Roles = "Admin")]
-@page "/employees"
+@page "/deceaseds"
 @using CurrieTechnologies.Razor.SweetAlert2;
 @using Microsoft.AspNetCore.Authorization;
 
@@ -8,24 +8,24 @@
 @inject SweetAlertService swal
 
 
-<h3>Empleados</h3>
+<h3>Difuntos</h3>
 
-@if (Employees is null)
+@if (deceaseds is null)
 {
     <div class="spinner" />
 }
 else
 {
 
-    <GenericList MyList="Employees">
+    <GenericList MyList="deceaseds">
 
         <Body>
 
             <div class="card">
                 <div class="card-header">
                     <span>
-                        <i class="oi oi-globe"></i> Empleados
-                        <a class="btn btn-sm btn-primary float-end" href="/employees/create"><i class="oi oi-plus"></i> Adicionar Empleado</a>
+                        <i class="oi oi-globe"></i> Difuntos
+                        <a class="btn btn-sm btn-primary float-end" href="/deceaseds/create"><i class="oi oi-plus"></i> Adicionar Difunto</a>
                     </span>
                 </div>
             </div>
@@ -33,7 +33,7 @@ else
             <div class="card-body">
                 <div class="mb-2" style="display: flex; flex-wrap:wrap; align-items: center;">
                     <div>
-                        <input style="width: 400px;" type="text" class="form-control" id="titulo" placeholder="Buscar empleado..." @bind-value="Filter" />
+                        <input style="width: 400px;" type="text" class="form-control" id="titulo" placeholder="Buscar difunto..." @bind-value="Filter" />
                     </div>
                     <div class="mx-1">
                         <button type="button" class="btn btn-outline-primary" @onclick="ApplyFilterAsync"><i class="oi oi-layers" /> Filtrar</button>
@@ -60,54 +60,65 @@ else
 
 
 
-                        <td><b>Dirección</b></td>
+                        <td><b>Sexo</b></td>
 
 
 
 
-                        <td><b>Cargo</b></td>
+                        <td><b>Nacimiento</b></td>
 
 
 
 
-                        <td><b>Teléfono</b></td>
+                        <td><b>Fecha Muerte</b></td>
 
 
 
 
-                        <td><b>Email</b></td>
+                        <td><b>Causa muerte</b></td>
 
 
 
 
+                        <td><b>Lugar Facellimiento</b></td>
 
+
+
+
+                        <td><b>Estado civil</b></td>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var employee in Employees!)
+                    @foreach (var deceased in deceaseds!)
                     {
                         <tr>
                             <td>
-                                @employee.Cedula
+                                @deceased.Cedula
                             </td>
                             <td>
-                                @employee.FullName
+                                @deceased.FullName
                             </td>
                             <td>
-                                @employee.Dir
+                                @deceased.Sexo
                             </td>
                             <td>
-                                @employee.Cargo
+                                @deceased.Nacimiento
                             </td>
                             <td>
-                                @employee.Tel
+                                @deceased.Defuncion
                             </td>
                             <td>
-                                @employee.Email
+                                @deceased.CausaMuerte
                             </td>
                             <td>
-                                <a href="/employees/edit/@employee.Id" class="btn btn-warning">Editar</a>
-                                <button class="btn btn-danger" @onclick=@(() => Delete(employee))>Borrar</button>
+                                @deceased.LugarFallecimiento
+                            </td>
+                            <td>
+                                @deceased.EstadoCivil
+                            </td>
+                            <td>
+                                <a href="/deceaseds/edit/@deceased.Id" class="btn btn-warning">Editar</a>
+                                <button class="btn btn-danger" @onclick=@(() => Delete(deceased))>Borrar</button>
                             </td>
 
                         </tr>
@@ -121,7 +132,7 @@ else
 }
 
 @code {
-    public List<Employee>? Employees { get; set; }
+    public List<Deceased>? deceaseds { get; set; }
     private int currentPage = 1;
     private int totalPages;
 
@@ -158,29 +169,23 @@ else
 
         if (string.IsNullOrEmpty(Filter))
         {
-            url1 = $"api/employees?page={page}";
-            url2 = $"api/employees/totalPages";
+            url1 = $"api/deceaseds?page={page}";
+            url2 = $"api/deceaseds/totalPages";
         }
         else
         {
-            url1 = $"api/employees?page={page}&filter={Filter}";
-            url2 = $"api/employees/totalPages?filter={Filter}";
+            url1 = $"api/deceaseds?page={page}&filter={Filter}";
+            url2 = $"api/deceaseds/totalPages?filter={Filter}";
         }
 
-        try
-        {
-            var responseHppt = await repository.Get<List<Employee>>(url1);
-            var responseHppt2 = await repository.Get<int>(url2);
-            Employees = responseHppt.Response!;
-            totalPages = responseHppt2.Response!;
-        }
-        catch (Exception ex)
-        {
-            await swal.FireAsync("Error", ex.Message, SweetAlertIcon.Error);
-        }
+
+        var responseHppt = await repository.Get<List<Deceased>>(url1);
+        var responseHppt2 = await repository.Get<int>(url2);
+        deceaseds = responseHppt.Response!;
+        totalPages = responseHppt2.Response!;
     }
 
-    private async Task Delete(Employee employee)
+    private async Task Delete(Deceased deceased)
     {
         var result = await swal.FireAsync(new SweetAlertOptions
             {
@@ -197,7 +202,7 @@ else
             return;
         }
 
-        var responseHTTP = await repository.Delete($"api/employees/{employee.Id}");
+        var responseHTTP = await repository.Delete($"api/deceaseds/{deceased.Id}");
 
         if (responseHTTP.Error)
         {

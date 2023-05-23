@@ -1,0 +1,35 @@
+﻿@page "/deceaseds/create"
+@using CurrieTechnologies.Razor.SweetAlert2;
+@inject NavigationManager navigationManager
+@inject IRepository repository
+@inject SweetAlertService swal
+
+<h3>Añadir Difunto</h3>
+
+<DeceasedsForm @ref="deceasedsForm" Deceased="deceased" OnValidSubmit="Create" ReturnAction="Return" />
+
+@code {
+    private Deceased deceased = new();
+    private DeceasedsForm? deceasedsForm;
+
+    private async Task Create()
+    {
+        var httpResponse = await repository.Post("api/deceaseds", deceased);
+
+        if (httpResponse.Error)
+        {
+            var mensajeError = await httpResponse.GetErrorMessage();
+            await swal.FireAsync("Error", mensajeError, SweetAlertIcon.Error);
+        }
+        else
+        {
+            deceasedsForm!.FormPostedSuccessfully = true;
+            navigationManager.NavigateTo("deceaseds");
+        }
+    }
+
+    private void Return()
+    {
+        navigationManager.NavigateTo("deceaseds");
+    }
+}

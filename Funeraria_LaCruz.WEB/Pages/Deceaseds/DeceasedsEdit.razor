@@ -1,0 +1,67 @@
+﻿@page "/deceaseds/edit/{Id:int}"
+@using CurrieTechnologies.Razor.SweetAlert2;
+@inject NavigationManager navigationManager
+@inject IRepository repository
+@inject SweetAlertService swal
+
+<h3>Editar Difunto</h3>
+
+@if (deceased is null)
+{
+    <p>Cargando...</p>
+}
+else
+{
+    <DeceasedsForm @ref="deceasedsForm" Deceased="deceased" OnValidSubmit="Edit" ReturnAction="Return" />
+}
+
+@code {
+    private Deceased? deceased;
+    private DeceasedsForm? deceasedsForm;
+
+    [Parameter]
+    public int Id { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var responseHTTP = await repository.Get<Deceased>($"api/deceaseds/{Id}");
+
+        if (responseHTTP.Error)
+        {
+            if (responseHTTP.HttpResponseMessage.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                navigationManager.NavigateTo("deceaseds");
+            }
+            else
+            {
+                var messageError = await responseHTTP.GetErrorMessage();
+                await swal.FireAsync("Error", messageError, SweetAlertIcon.Error);
+            }
+        }
+        else
+        {
+            deceased = responseHTTP.Response;
+        }
+    }
+
+    private async Task Edit()
+    {
+        var responseHTTP = await repository.Put("api/deceaseds", deceased);
+
+        if (responseHTTP.Error)
+        {
+            var mensajeError = await responseHTTP.GetErrorMessage();
+            await swal.FireAsync("Error", mensajeError, SweetAlertIcon.Error);
+        }
+        else
+        {
+            deceasedsForm!.FormPostedSuccessfully = true;
+            navigationManager.NavigateTo("deceaseds");
+        }
+    }
+
+    private void Return()
+    {
+        navigationManager.NavigateTo("deceaseds");
+    }
+}

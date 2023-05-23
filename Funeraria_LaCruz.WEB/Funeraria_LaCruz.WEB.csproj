@@ -7,10 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="Pages\Employees\EmployeesIndex.razor" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="CurrieTechnologies.Razor.SweetAlert2" Version="5.5.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="7.0.5" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="7.0.5" />
@@ -20,24 +16,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Funeraria_LaCruz.Shared\Funeraria_LaCruz.Shared.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Pages\Deceaseds\" />
-    <Folder Include="Pages\Plans\" />
-    <Folder Include="Pages\Services\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <UpToDateCheckInput Remove="Pages\Employees\EmployeesIndex.razor" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <_ContentIncludedByDefault Remove="Pages\Employees\EmployeesIndex.razor" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="Pages\Employees\EmployeesIndex.razor" />
   </ItemGroup>
 
 </Project>

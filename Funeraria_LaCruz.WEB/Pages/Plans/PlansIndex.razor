@@ -1,5 +1,5 @@
 ﻿@attribute [Authorize(Roles = "Admin")]
-@page "/employees"
+@page "/plans"
 @using CurrieTechnologies.Razor.SweetAlert2;
 @using Microsoft.AspNetCore.Authorization;
 
@@ -8,24 +8,24 @@
 @inject SweetAlertService swal
 
 
-<h3>Empleados</h3>
+<h3>Planes</h3>
 
-@if (Employees is null)
+@if (Plans is null)
 {
     <div class="spinner" />
 }
 else
 {
 
-    <GenericList MyList="Employees">
+    <GenericList MyList="Plans">
 
         <Body>
 
             <div class="card">
                 <div class="card-header">
                     <span>
-                        <i class="oi oi-globe"></i> Empleados
-                        <a class="btn btn-sm btn-primary float-end" href="/employees/create"><i class="oi oi-plus"></i> Adicionar Empleado</a>
+                        <i class="oi oi-globe"></i> Planes
+                        <a class="btn btn-sm btn-primary float-end" href="/plans/create"><i class="oi oi-plus"></i> Adicionar Plan</a>
                     </span>
                 </div>
             </div>
@@ -33,7 +33,7 @@ else
             <div class="card-body">
                 <div class="mb-2" style="display: flex; flex-wrap:wrap; align-items: center;">
                     <div>
-                        <input style="width: 400px;" type="text" class="form-control" id="titulo" placeholder="Buscar empleado..." @bind-value="Filter" />
+                        <input style="width: 400px;" type="text" class="form-control" id="titulo" placeholder="Buscar plan..." @bind-value="Filter" />
                     </div>
                     <div class="mx-1">
                         <button type="button" class="btn btn-outline-primary" @onclick="ApplyFilterAsync"><i class="oi oi-layers" /> Filtrar</button>
@@ -50,33 +50,17 @@ else
             <table class="table table-striped">
                 <thead>
                     <tr>
-                        <td><b>Cédula</b></td>
+                        <td><b>Plan</b></td>
 
 
 
 
-                        <td><b>Nombre</b></td>
+                        <td><b>Descripcion</b></td>
 
 
 
 
-                        <td><b>Dirección</b></td>
-
-
-
-
-                        <td><b>Cargo</b></td>
-
-
-
-
-                        <td><b>Teléfono</b></td>
-
-
-
-
-                        <td><b>Email</b></td>
-
+                        <td><b>Precio</b></td>
 
 
 
@@ -84,30 +68,21 @@ else
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var employee in Employees!)
+                    @foreach (var plan in Plans!)
                     {
                         <tr>
                             <td>
-                                @employee.Cedula
+                                @plan.Name
                             </td>
                             <td>
-                                @employee.FullName
+                                @plan.Descripcion
                             </td>
                             <td>
-                                @employee.Dir
+                                @plan.Precio
                             </td>
                             <td>
-                                @employee.Cargo
-                            </td>
-                            <td>
-                                @employee.Tel
-                            </td>
-                            <td>
-                                @employee.Email
-                            </td>
-                            <td>
-                                <a href="/employees/edit/@employee.Id" class="btn btn-warning">Editar</a>
-                                <button class="btn btn-danger" @onclick=@(() => Delete(employee))>Borrar</button>
+                                <a href="/plans/edit/@plan.Id" class="btn btn-warning">Editar</a>
+                                <button class="btn btn-danger" @onclick=@(() => Delete(plan))>Borrar</button>
                             </td>
 
                         </tr>
@@ -121,7 +96,7 @@ else
 }
 
 @code {
-    public List<Employee>? Employees { get; set; }
+    public List<Plan>? Plans { get; set; }
     private int currentPage = 1;
     private int totalPages;
 
@@ -158,29 +133,23 @@ else
 
         if (string.IsNullOrEmpty(Filter))
         {
-            url1 = $"api/employees?page={page}";
-            url2 = $"api/employees/totalPages";
+            url1 = $"api/plans?page={page}";
+            url2 = $"api/plans/totalPages";
         }
         else
         {
-            url1 = $"api/employees?page={page}&filter={Filter}";
-            url2 = $"api/employees/totalPages?filter={Filter}";
+            url1 = $"api/plans?page={page}&filter={Filter}";
+            url2 = $"api/plans/totalPages?filter={Filter}";
         }
 
-        try
-        {
-            var responseHppt = await repository.Get<List<Employee>>(url1);
-            var responseHppt2 = await repository.Get<int>(url2);
-            Employees = responseHppt.Response!;
-            totalPages = responseHppt2.Response!;
-        }
-        catch (Exception ex)
-        {
-            await swal.FireAsync("Error", ex.Message, SweetAlertIcon.Error);
-        }
+
+        var responseHppt = await repository.Get<List<Plan>>(url1);
+        var responseHppt2 = await repository.Get<int>(url2);
+        Plans = responseHppt.Response!;
+        totalPages = responseHppt2.Response!;
     }
 
-    private async Task Delete(Employee employee)
+    private async Task Delete(Plan plan)
     {
         var result = await swal.FireAsync(new SweetAlertOptions
             {
@@ -197,7 +166,7 @@ else
             return;
         }
 
-        var responseHTTP = await repository.Delete($"api/employees/{employee.Id}");
+        var responseHTTP = await repository.Delete($"api/plans/{plan.Id}");
 
         if (responseHTTP.Error)
         {

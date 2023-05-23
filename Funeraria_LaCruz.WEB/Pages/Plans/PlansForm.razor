@@ -6,36 +6,20 @@
 <EditForm EditContext="editContext" OnValidSubmit="OnValidSubmit">
     <DataAnnotationsValidator />
     <div class="mb-3">
-
-        <label>Cédula:</label>
+        <label>Plan:</label>
         <div>
-            <InputText class="form-control" @bind-Value="@Employee.Cedula" />
-            <ValidationMessage For="@(() => Employee.Cedula)" />
+            <InputText class="form-control" @bind-Value="@Plan.Name" />
+            <ValidationMessage For="@(() => Plan.Name)" />
         </div>
-        <label>Nombre:</label>
+        <label>Descripcion:</label>
         <div>
-            <InputText class="form-control" @bind-Value="@Employee.FullName" />
-            <ValidationMessage For="@(() => Employee.FullName)" />
+            <InputText class="form-control" @bind-Value="@Plan.Descripcion" />
+            <ValidationMessage For="@(() => Plan.Descripcion)" />
         </div>
-        <label>Dirección:</label>
+        <label>Precio:</label>
         <div>
-            <InputText class="form-control" @bind-Value="@Employee.Dir" />
-            <ValidationMessage For="@(() => Employee.Dir)" />
-        </div>
-        <label>Cargo:</label>
-        <div>
-            <InputText class="form-control" @bind-Value="@Employee.Cargo" />
-            <ValidationMessage For="@(() => Employee.Cargo)" />
-        </div>
-        <label>Teléfono:</label>
-        <div>
-            <InputText class="form-control" @bind-Value="@Employee.Tel" />
-            <ValidationMessage For="@(() => Employee.Tel)" />
-        </div>
-        <label>Email:</label>
-        <div>
-            <InputText class="form-control" @bind-Value="@Employee.Email" />
-            <ValidationMessage For="@(() => Employee.Email)" />
+            <InputText class="form-control" @bind-Value="@Plan.Precio" />
+            <ValidationMessage For="@(() => Plan.Precio)" />
         </div>
     </div>
 
@@ -49,13 +33,13 @@
 
     protected override void OnInitialized()
     {
-        editContext = new(Employee);
+        editContext = new(Plan);
     }
 
 
     [EditorRequired]
     [Parameter]
-    public Employee Employee { get; set; } = null!;
+    public Plan Plan { get; set; } = null!;
 
     [EditorRequired]
     [Parameter]

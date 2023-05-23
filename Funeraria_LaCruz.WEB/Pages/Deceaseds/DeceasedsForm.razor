@@ -6,36 +6,45 @@
 <EditForm EditContext="editContext" OnValidSubmit="OnValidSubmit">
     <DataAnnotationsValidator />
     <div class="mb-3">
-
-        <label>Cédula:</label>
+        <label>Cedula:</label>
         <div>
-            <InputText class="form-control" @bind-Value="@Employee.Cedula" />
-            <ValidationMessage For="@(() => Employee.Cedula)" />
+            <InputText class="form-control" @bind-Value="@Deceased.Cedula" />
+            <ValidationMessage For="@(() => Deceased.Cedula)" />
         </div>
-        <label>Nombre:</label>
+        <label>Nombre Completo:</label>
         <div>
-            <InputText class="form-control" @bind-Value="@Employee.FullName" />
-            <ValidationMessage For="@(() => Employee.FullName)" />
+            <InputText class="form-control" @bind-Value="@Deceased.FullName" />
+            <ValidationMessage For="@(() => Deceased.FullName)" />
         </div>
-        <label>Dirección:</label>
+        <label>Sexo:</label>
         <div>
-            <InputText class="form-control" @bind-Value="@Employee.Dir" />
-            <ValidationMessage For="@(() => Employee.Dir)" />
+            <InputText class="form-control" @bind-Value="@Deceased.Sexo" />
+            <ValidationMessage For="@(() => Deceased.Sexo)" />
         </div>
-        <label>Cargo:</label>
+        <label>Fecha nacimiento:</label>
         <div>
-            <InputText class="form-control" @bind-Value="@Employee.Cargo" />
-            <ValidationMessage For="@(() => Employee.Cargo)" />
+            <InputText class="form-control" @bind-Value="@Deceased.Nacimiento" />
+            <ValidationMessage For="@(() => Deceased.Nacimiento)" />
         </div>
-        <label>Teléfono:</label>
+        <label>Fecha Muerte:</label>
         <div>
-            <InputText class="form-control" @bind-Value="@Employee.Tel" />
-            <ValidationMessage For="@(() => Employee.Tel)" />
+            <InputText class="form-control" @bind-Value="@Deceased.Defuncion" />
+            <ValidationMessage For="@(() => Deceased.Defuncion)" />
         </div>
-        <label>Email:</label>
+        <label>Causa fallecimiento:</label>
         <div>
-            <InputText class="form-control" @bind-Value="@Employee.Email" />
-            <ValidationMessage For="@(() => Employee.Email)" />
+            <InputText class="form-control" @bind-Value="@Deceased.CausaMuerte" />
+            <ValidationMessage For="@(() => Deceased.CausaMuerte)" />
+        </div>
+        <label>Lugar Fallecimiento:</label>
+        <div>
+            <InputText class="form-control" @bind-Value="@Deceased.LugarFallecimiento" />
+            <ValidationMessage For="@(() => Deceased.LugarFallecimiento)" />
+        </div>
+        <label>Estado civil:</label>
+        <div>
+            <InputText class="form-control" @bind-Value="@Deceased.EstadoCivil" />
+            <ValidationMessage For="@(() => Deceased.EstadoCivil)" />
         </div>
     </div>
 
@@ -49,13 +58,13 @@
 
     protected override void OnInitialized()
     {
-        editContext = new(Employee);
+        editContext = new(Deceased);
     }
 
 
     [EditorRequired]
     [Parameter]
-    public Employee Employee { get; set; } = null!;
+    public Deceased Deceased { get; set; } = null!;
 
     [EditorRequired]
     [Parameter]
