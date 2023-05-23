@@ -101,7 +101,7 @@ namespace Funeraria_LaCruz.API.Controllers
         public async Task<ActionResult> Get(int id)
         {
             var funerariaCategory = await _context.FunerariaCategories
-                 .Include(x => x.Products)
+                 .Include(x => x.Products!)
                  .FirstOrDefaultAsync(x => x.Id == id);
             if (funerariaCategory is null)
             {
